@@ -5,9 +5,10 @@ import start.spring.JPA.Models.User;
 import start.spring.JPA.DTO.UserResponse;
 
 @Service
-@Data
+@RequiredArgsConstructor
 public class UserService {
-    public final UserRepository userRepo;
+    private final UserRepository userRepo;
+
     public UserResponse createUser(UserCreate userObj)
     {
         User user=new User();
@@ -18,10 +19,10 @@ public class UserService {
         user.setEmail(userObj.email());
         user.setPassword(userObj.password());
 
-        User example = user.getUsername(userObj);
-
+        userRepo.save(user);
+        String uname=user.getUsername();
         String  customMessage="Welcome "+example+". You're part of the family now.Karibu";
-        String uname=userObj.username();
+        
         return new UserResponse(uname,customMessage);
     }
 }
